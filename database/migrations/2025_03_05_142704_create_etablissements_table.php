@@ -17,9 +17,7 @@ return new class extends Migration
             $table->string('nom_etablissement');
             
             // Région avec des valeurs spécifiques
-            $table->enum('region', [
-                'PLATEAUX EST', 'PLATEAUX OUEST', 'CENTRE', 'SAVANES', 'KARA', 'GRAND LOME'
-            ]);
+            $table->string('region');
             
             // Préfecture avec toutes les préfectures de Lomé en grand caractère
             $table->string('prefecture'); 
@@ -29,43 +27,41 @@ return new class extends Migration
             $table->string('ville_village_quartier');
             
             // Type de milieu
-            $table->enum('libelle_type_milieu', ['Urbain', 'Rural', 'Semi urbain']);
+            $table->string('libelle_type_milieu');
             
             // Statut de l'établissement
-            $table->enum('libelle_type_statut_etab', [
-                'Privé Laïc', 'Public', 'Privé Protestant', 'Privé Catholique', 'Privé Islamique'
-            ]);
+            $table->string('libelle_type_statut_etab');
             
             // Type du système
-            $table->enum('libelle_type_systeme', [
-                'SECONDAIRE I', 'SECONDAIRE II', 'PRIMAIRE', 'PRESCOLAIRE'
-            ]);
+            $table->string('libelle_type_systeme');
             
             // Infrastructure
-            $table->boolean('existe_elect');
-            $table->boolean('existe_latrine');
-            $table->boolean('existe_latrine_fonct');
-            $table->boolean('acces_toute_saison');
-            $table->boolean('eau');
+            $table->boolean('existe_elect')->default(false);
+            $table->boolean('existe_latrine')->default(false);
+            $table->boolean('existe_latrine_fonct')->default(false);
+            $table->boolean('acces_toute_saison')->default(false);
+            $table->boolean('eau')->default(false);
             
             // Données géographiques
-            $table->decimal('latitude', 10, 8);
-            $table->decimal('longitude', 11, 8);
+            $table->string('latitude', 20);
+            $table->string('longitude', 20);
             
-            // Autres informations
-            $table->integer('sommedenb_eff_g');
-            $table->integer('sommedenb_eff_f');
-            $table->integer('tot');
-            $table->integer('sommedenb_ens_h');
-            $table->integer('sommedenb_ens_f');
-            $table->integer('total_ense');
-            $table->integer('sommedenb_salles_classes_dur');
-            $table->integer('sommedenb_salles_classes_banco');
-            $table->integer('sommedenb_salles_classes_autre');
+            // Effectifs et enseignants
+            $table->integer('sommedenb_eff_g')->default(0); // Effectif garçons
+            $table->integer('sommedenb_eff_f')->default(0); // Effectif filles
+            $table->integer('tot')->default(0);             // Total effectif
+            $table->integer('sommedenb_ens_h')->default(0); // Enseignants hommes
+            $table->integer('sommedenb_ens_f')->default(0); // Enseignantes femmes
+            $table->integer('total_ense')->default(0);      // Total enseignants
+            
+            // Salles de classe
+            $table->integer('sommedenb_salles_classes_dur')->default(0);  // Salles en dur
+            $table->integer('sommedenb_salles_classes_banco')->default(0); // Salles en banco
+            $table->integer('sommedenb_salles_classes_autre')->default(0); // Autres types de salles
             
             // Autres champs
-            $table->string('libelle_type_annee');
-            $table->string('commune_etab');
+            $table->string('libelle_type_annee')->nullable(); // Année scolaire
+            $table->string('commune_etab')->nullable();       // Commune
             
             $table->timestamps();
         });
