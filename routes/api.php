@@ -10,11 +10,11 @@ Route::get('/user', function (Request $request) {
 
 use App\Http\Controllers\EtablissementController;
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/etablissements', [EtablissementController::class, 'store']);
-    Route::put('/etablissements/{id}', [EtablissementController::class, 'update']);
-    Route::delete('/etablissements/{id}', [EtablissementController::class, 'destroy']);
-});
+// Route::middleware('auth:sanctum')->group(function () {
+//     Route::post('/etablissements', [EtablissementController::class, 'store']);
+//     Route::put('/etablissements/{id}', [EtablissementController::class, 'update']);
+//     Route::delete('/etablissements/{id}', [EtablissementController::class, 'destroy']);
+// });
 
 // Route::get('/etablissements', [EtablissementController::class, 'index']);
 // Route::get('/etablissements/{id}', [EtablissementController::class, 'show']);
@@ -27,3 +27,7 @@ Route::get('/etablissements/search', [EtablissementController::class, 'search'])
 Route::get('/etablissements/map', [EtablissementController::class, 'map']);
 Route::get('/etablissements/{id}', [EtablissementController::class, 'show']);
 Route::get('/etablissements', [EtablissementController::class, 'index']);
+
+Route::post('/etablissements', [EtablissementController::class, 'store']);
+Route::put('/etablissements/{id}', [EtablissementController::class, 'update']);
+Route::delete('/etablissements/{id}', [EtablissementController::class, 'destroy']);
