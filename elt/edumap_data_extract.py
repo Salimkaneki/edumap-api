@@ -371,7 +371,8 @@ def insert_data_batch(connexion, df, batch_size=100):
 
 def main():
     # Chemin du fichier Excel
-    fichier_excel = 'C:/Users/salim_mevtr/Documents/Base_2024.xlsx'
+    # fichier_excel = 'C:/Users/salim_mevtr/Documents/Base_2024.xlsx'
+    fichier_excel = 'C:/Users/Salim_Pereira/Laravel-Project/edumap-api/elt/Base_2024.xlsx'
     
     # Test de la connexion à la base de données
     logging.info("Test de la connexion à la base de données...")
