@@ -26,11 +26,35 @@ class EtablissementController extends Controller
         return response()->json($etablissements);
     }
 
-    // Obtenir les détails d’un établissement
     public function show($id)
     {
-        $etablissement = Etablissement::findOrFail($id);
-        return response()->json($etablissement);
+        try {
+            Log::info("Recherche de l'établissement avec l'ID: " . $id);
+            
+            // Convertir en entier pour s'assurer que nous avons le bon format
+            $id = (int) $id;
+            
+            $etablissement = Etablissement::find($id);
+            
+            if (!$etablissement) {
+                Log::warning("Établissement non trouvé avec l'ID: " . $id);
+                return response()->json(['error' => 'Établissement non trouvé'], 404);
+            }
+            
+            Log::info("Établissement trouvé:", ['id' => $etablissement->id, 'nom' => $etablissement->nom_etablissement]);
+            
+            return response()->json($etablissement);
+        } catch (\Exception $e) {
+            Log::error("Erreur lors de la recherche de l'établissement: " . $e->getMessage(), [
+                'id' => $id,
+                'exception' => $e->getTraceAsString()
+            ]);
+            
+            return response()->json([
+                'error' => 'Une erreur est survenue lors de la recherche de l\'établissement',
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 
     // Rechercher des établissements par différents critères
