@@ -1,0 +1,840 @@
+{
+	"info": {
+		"_postman_id": "edumap-api-collection",
+		"name": "EduMap API - Collection complète",
+		"description": "Collection Postman pour tester tous les endpoints de l'API EduMap avec des données réalistes",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{auth_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8000/api",
+			"type": "string"
+		},
+		{
+			"key": "auth_token",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "🔓 APIs Publiques",
+			"item": [
+				{
+					"name": "Liste des établissements",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/v1/etablissements?page=1&per_page=10",
+							"host": ["{{base_url}}"],
+							"path": ["v1", "etablissements"],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "per_page",
+									"value": "10"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Liste avec filtres avancés",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/v1/etablissements?region=Grand Lomé&statut=Public&systeme=Primaire&avec_electricite=1&search=école&effectif_min=50&effectif_max=500",
+							"host": ["{{base_url}}"],
+							"path": ["v1", "etablissements"],
+							"query": [
+								{
+									"key": "region",
+									"value": "Grand Lomé"
+								},
+								{
+									"key": "statut",
+									"value": "Public"
+								},
+								{
+									"key": "systeme",
+									"value": "Primaire"
+								},
+								{
+									"key": "avec_electricite",
+									"value": "1"
+								},
+								{
+									"key": "search",
+									"value": "école"
+								},
+								{
+									"key": "effectif_min",
+									"value": "50"
+								},
+								{
+									"key": "effectif_max",
+									"value": "500"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Recherche par proximité",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/v1/etablissements/nearby?lat=6.1319&lng=1.2228&radius=10&statut=Public",
+							"host": ["{{base_url}}"],
+							"path": ["v1", "etablissements", "nearby"],
+							"query": [
+								{
+									"key": "lat",
+									"value": "6.1319",
+									"description": "Latitude de Lomé"
+								},
+								{
+									"key": "lng",
+									"value": "1.2228",
+									"description": "Longitude de Lomé"
+								},
+								{
+									"key": "radius",
+									"value": "10",
+									"description": "Rayon en km"
+								},
+								{
+									"key": "statut",
+									"value": "Public"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Détail d'un établissement",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/v1/etablissements/1",
+							"host": ["{{base_url}}"],
+							"path": ["v1", "etablissements", "1"]
+						}
+					}
+				},
+				{
+					"name": "Statistiques publiques",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/v1/statistics",
+							"host": ["{{base_url}}"],
+							"path": ["v1", "statistics"]
+						}
+					}
+				},
+				{
+					"name": "Références - Régions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/v1/references/regions",
+							"host": ["{{base_url}}"],
+							"path": ["v1", "references", "regions"]
+						}
+					}
+				},
+				{
+					"name": "Références - Statuts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/v1/references/statuts",
+							"host": ["{{base_url}}"],
+							"path": ["v1", "references", "statuts"]
+						}
+					}
+				},
+				{
+					"name": "Références - Systèmes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/v1/references/systemes",
+							"host": ["{{base_url}}"],
+							"path": ["v1", "references", "systemes"]
+						}
+					}
+				},
+				{
+					"name": "Références - Préfectures",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/v1/references/prefectures",
+							"host": ["{{base_url}}"],
+							"path": ["v1", "references", "prefectures"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "🔐 Authentification",
+			"item": [
+				{
+					"name": "Connexion Admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const responseJson = pm.response.json();",
+									"    pm.environment.set('auth_token', responseJson.token);",
+									"    pm.collectionVariables.set('auth_token', responseJson.token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"admin@edumap.tg\",\n    \"password\": \"admin123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/login",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "login"]
+						}
+					}
+				},
+				{
+					"name": "Connexion Modérateur",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const responseJson = pm.response.json();",
+									"    pm.environment.set('auth_token', responseJson.token);",
+									"    pm.collectionVariables.set('auth_token', responseJson.token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"moderateur@edumap.tg\",\n    \"password\": \"moderateur123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/login",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "login"]
+						}
+					}
+				},
+				{
+					"name": "Informations utilisateur connecté",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/auth/user",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "user"]
+						}
+					}
+				},
+				{
+					"name": "Refresh Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const responseJson = pm.response.json();",
+									"    pm.environment.set('auth_token', responseJson.token);",
+									"    pm.collectionVariables.set('auth_token', responseJson.token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/auth/refresh",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "refresh"]
+						}
+					}
+				},
+				{
+					"name": "Déconnexion",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/auth/logout",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "logout"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "🔐 Administration - Dashboard",
+			"item": [
+				{
+					"name": "Dashboard admin",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/admin/dashboard",
+							"host": ["{{base_url}}"],
+							"path": ["admin", "dashboard"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "🔐 Administration - Établissements",
+			"item": [
+				{
+					"name": "Liste des établissements (Admin)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/admin/etablissements?page=1&per_page=20&order_by=nom_etablissement&order_direction=asc",
+							"host": ["{{base_url}}"],
+							"path": ["admin", "etablissements"],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "per_page",
+									"value": "20"
+								},
+								{
+									"key": "order_by",
+									"value": "nom_etablissement"
+								},
+								{
+									"key": "order_direction",
+									"value": "asc"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Créer un établissement",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"code_etablissement\": \"TG-TEST-001\",\n    \"nom_etablissement\": \"École Primaire Test\",\n    \"region\": \"Grand Lomé\",\n    \"prefecture\": \"Golfe\",\n    \"commune_etab\": \"Lomé 1er\",\n    \"canton_village_autonome\": \"Lomé\",\n    \"ville_village_quartier\": \"Bè\",\n    \"libelle_type_milieu\": \"Urbain\",\n    \"libelle_type_statut_etab\": \"Public\",\n    \"libelle_type_systeme\": \"Primaire\",\n    \"libelle_type_annee\": \"2024\",\n    \"latitude\": 6.1319,\n    \"longitude\": 1.2228,\n    \"existe_elect\": true,\n    \"existe_latrine\": true,\n    \"existe_latrine_fonct\": true,\n    \"acces_toute_saison\": true,\n    \"eau\": true,\n    \"sommedenb_eff_g\": 120,\n    \"sommedenb_eff_f\": 115,\n    \"tot\": 235,\n    \"sommedenb_ens_h\": 4,\n    \"sommedenb_ens_f\": 6,\n    \"total_ense\": 10,\n    \"sommedenb_salles_classes_dur\": 8,\n    \"sommedenb_salles_classes_banco\": 2,\n    \"sommedenb_salles_classes_autre\": 0\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/admin/etablissements",
+							"host": ["{{base_url}}"],
+							"path": ["admin", "etablissements"]
+						}
+					}
+				},
+				{
+					"name": "Modifier un établissement",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nom_etablissement\": \"École Primaire Test Modifiée\",\n    \"tot\": 250,\n    \"existe_elect\": true,\n    \"eau\": true,\n    \"sommedenb_ens_h\": 5,\n    \"sommedenb_ens_f\": 7,\n    \"total_ense\": 12\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/admin/etablissements/1",
+							"host": ["{{base_url}}"],
+							"path": ["admin", "etablissements", "1"]
+						}
+					}
+				},
+				{
+					"name": "Supprimer un établissement",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/admin/etablissements/1",
+							"host": ["{{base_url}}"],
+							"path": ["admin", "etablissements", "1"]
+						}
+					}
+				},
+				{
+					"name": "Suppression en masse",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"ids\": [1, 2, 3]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/admin/etablissements/bulk-delete",
+							"host": ["{{base_url}}"],
+							"path": ["admin", "etablissements", "bulk-delete"]
+						}
+					}
+				},
+				{
+					"name": "Modification en masse",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"ids\": [1, 2, 3],\n    \"updates\": {\n        \"existe_elect\": true,\n        \"eau\": true,\n        \"libelle_type_annee\": \"2024\"\n    }\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/admin/etablissements/bulk-update",
+							"host": ["{{base_url}}"],
+							"path": ["admin", "etablissements", "bulk-update"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "🔐 Administration - Import/Export",
+			"item": [
+				{
+					"name": "Export des données",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/admin/etablissements/export?region=Grand Lomé&statut=Public",
+							"host": ["{{base_url}}"],
+							"path": ["admin", "etablissements", "export"],
+							"query": [
+								{
+									"key": "region",
+									"value": "Grand Lomé"
+								},
+								{
+									"key": "statut",
+									"value": "Public"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Import de données (JSON)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"mode\": \"create\",\n    \"data\": [\n        {\n            \"code_etablissement\": \"TG-IMPORT-001\",\n            \"nom_etablissement\": \"École Import Test 1\",\n            \"region\": \"Maritime\",\n            \"prefecture\": \"Vo\",\n            \"commune_etab\": \"Vogan\",\n            \"canton_village_autonome\": \"Vogan\",\n            \"ville_village_quartier\": \"Vogan Centre\",\n            \"libelle_type_milieu\": \"Urbain\",\n            \"libelle_type_statut_etab\": \"Public\",\n            \"libelle_type_systeme\": \"Primaire\",\n            \"libelle_type_annee\": \"2024\",\n            \"latitude\": 6.3256,\n            \"longitude\": 1.5369,\n            \"existe_elect\": true,\n            \"existe_latrine\": true,\n            \"existe_latrine_fonct\": true,\n            \"acces_toute_saison\": true,\n            \"eau\": false,\n            \"sommedenb_eff_g\": 95,\n            \"sommedenb_eff_f\": 87,\n            \"tot\": 182,\n            \"sommedenb_ens_h\": 3,\n            \"sommedenb_ens_f\": 4,\n            \"total_ense\": 7,\n            \"sommedenb_salles_classes_dur\": 5,\n            \"sommedenb_salles_classes_banco\": 1,\n            \"sommedenb_salles_classes_autre\": 0\n        },\n        {\n            \"code_etablissement\": \"TG-IMPORT-002\",\n            \"nom_etablissement\": \"École Import Test 2\",\n            \"region\": \"Plateaux\",\n            \"prefecture\": \"Kloto\",\n            \"commune_etab\": \"Kpalimé\",\n            \"canton_village_autonome\": \"Kpalimé\",\n            \"ville_village_quartier\": \"Kpalimé Centre\",\n            \"libelle_type_milieu\": \"Urbain\",\n            \"libelle_type_statut_etab\": \"Privé laïc\",\n            \"libelle_type_systeme\": \"Secondaire\",\n            \"libelle_type_annee\": \"2024\",\n            \"latitude\": 6.9,\n            \"longitude\": 0.63,\n            \"existe_elect\": true,\n            \"existe_latrine\": true,\n            \"existe_latrine_fonct\": true,\n            \"acces_toute_saison\": true,\n            \"eau\": true,\n            \"sommedenb_eff_g\": 156,\n            \"sommedenb_eff_f\": 143,\n            \"tot\": 299,\n            \"sommedenb_ens_h\": 8,\n            \"sommedenb_ens_f\": 6,\n            \"total_ense\": 14,\n            \"sommedenb_salles_classes_dur\": 12,\n            \"sommedenb_salles_classes_banco\": 0,\n            \"sommedenb_salles_classes_autre\": 2\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/admin/etablissements/import",
+							"host": ["{{base_url}}"],
+							"path": ["admin", "etablissements", "import"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "🔐 Administration - Utilisateurs",
+			"item": [
+				{
+					"name": "Liste des utilisateurs",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/admin/users?page=1",
+							"host": ["{{base_url}}"],
+							"path": ["admin", "users"],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Créer un utilisateur",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Nouveau Modérateur\",\n    \"email\": \"nouveau.moderateur@edumap.tg\",\n    \"password\": \"motdepasse123\",\n    \"role\": \"moderateur\",\n    \"is_active\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/admin/users",
+							"host": ["{{base_url}}"],
+							"path": ["admin", "users"]
+						}
+					}
+				},
+				{
+					"name": "Modifier un utilisateur",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Modérateur Modifié\",\n    \"email\": \"moderateur.modifie@edumap.tg\",\n    \"role\": \"admin\",\n    \"is_active\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/admin/users/2",
+							"host": ["{{base_url}}"],
+							"path": ["admin", "users", "2"]
+						}
+					}
+				},
+				{
+					"name": "Supprimer un utilisateur",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/admin/users/3",
+							"host": ["{{base_url}}"],
+							"path": ["admin", "users", "3"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "🔄 Endpoints de compatibilité (Legacy)",
+			"item": [
+				{
+					"name": "Liste établissements (Legacy)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/etablissements-legacy?page=1&per_page=10",
+							"host": ["{{base_url}}"],
+							"path": ["etablissements-legacy"],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "per_page",
+									"value": "10"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Recherche établissements (Legacy)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/etablissements-legacy/search?nom_etablissement=école&region=Grand Lomé",
+							"host": ["{{base_url}}"],
+							"path": ["etablissements-legacy", "search"],
+							"query": [
+								{
+									"key": "nom_etablissement",
+									"value": "école"
+								},
+								{
+									"key": "region",
+									"value": "Grand Lomé"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Carte établissements (Legacy)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/etablissements-legacy/map",
+							"host": ["{{base_url}}"],
+							"path": ["etablissements-legacy", "map"]
+						}
+					}
+				},
+				{
+					"name": "Détail établissement (Legacy)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/etablissements-legacy/1",
+							"host": ["{{base_url}}"],
+							"path": ["etablissements-legacy", "1"]
+						}
+					}
+				}
+			]
+		}
+	]
+}

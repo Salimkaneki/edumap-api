@@ -21,6 +21,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'is_active',
     ];
 
     /**
@@ -43,6 +45,19 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_active' => 'boolean',
         ];
+    }
+
+    public function isAdmin() {
+        return $this->role === 'admin';
+    }
+
+    public function isModerator() {
+        return $this->role === 'moderateur';
+    }
+
+    public function canManageEstablishments() {
+        return in_array($this->role, ['admin', 'moderateur']);
     }
 }
